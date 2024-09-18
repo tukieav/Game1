@@ -9,10 +9,20 @@ from enemies import Enemies
 from physics import Physics
 from weapons import Weapons
 
-# Inicjalizacja Pygame
 pygame.init()
 
-# Inicjalizacja obiektów
+def draw_text(screen, text, size, x, y):
+    font = pygame.font.Font(None, size)
+    text_surface = font.render(text, True, (255, 255, 255))
+    screen.display.blit(text_surface, (x, y))
+
+def draw_button(screen, text, x, y, width, height):
+    pygame.draw.rect(screen.display, (0, 0, 0), (x, y, width, height))
+    draw_text(screen, text, 36, x + 10, y + 10)
+
+def check_button_click(pos, x, y, width, height):
+    return x < pos[0] < x + width and y < pos[1] < y + height
+
 screen = Screen()
 weapon = Weapons(screen, 'basic')
 player = Player(screen, weapon)
@@ -20,7 +30,6 @@ background = Background()
 enemies = Enemies()
 physics = Physics(player, enemies, weapon, weapon)
 
-# Główna pętla gry
 running = True
 last_shot_time = 0
 shoot_interval = 0.1
@@ -30,51 +39,55 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # Wypełnianie tła kolorem
     screen.fill_background()
 
-    # Tworzenie nowych gwiazd w tle
     if random.randint(0, 20) < 1:
         background.create_stars(screen.window_width)
 
-    # Aktualizacja pozycji gwiazd
     background.update_stars(screen.window_height)
-
-    # Rysowanie gwiazd
     background.draw_stars(screen)
 
-    # Tworzenie nowych wrogów
     if random.randint(0, 1000) < 1:
         enemies.create_enemies(screen.window_width)
 
-    # Aktualizacja pozycji wrogów
     enemies.update_enemies(screen.window_height)
-
-    # Rysowanie wrogów
     enemies.draw_enemies(screen)
 
-    # Rysowanie gracza
     player.draw_player(screen)
 
-    # Ruch gracza
     keys = pygame.key.get_pressed()
     player.move_player(keys)
 
-    # Strzelanie
     current_time = pygame.time.get_ticks() / 1000
-    last_shot_time = player.shoot(keys, current_time, last_shot_time, shoot_interval)
+    player_x, player_y = player.get_position()
+    last_shot_time = weapon.shoot_with_interval(keys, current_time, last_shot_time, player_x, player_y)
 
-    # Aktualizacja i rysowanie pocisków
     weapon.update_bullets()
     weapon.draw_bullets(screen)
 
-    # Sprawdzanie trafień pociskami
     physics.hit_by_bullet(enemies.enemy_list, weapon)
 
-    # Sprawdzanie kolizji
     if physics.check_collisions(player, enemies.enemy_list):
-        print("Kolizja! Gra zakończona!")
-        running = False
+        draw_text(screen, "You Loose! Restart?", 64, screen.window_width // 4, screen.window_height // 4)
+        draw_button(screen, "Yes", screen.window_width // 2 - 60, screen.window_height // 2 - 50, 100, 50)
+        draw_button(screen, "No", screen.window_width // 2 + 60, screen.window_height // 2 - 50, 100, 50)
+        pygame.display.flip()
 
-    # Odświeżanie ekranu
-    pygame.display.flip() 
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    waiting = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    if check_button_click(pos, screen.window_width // 2 - 60, screen.window_height // 2, 100, 50):
+                        player = Player(screen, weapon)
+                        enemies = Enemies()
+                        physics = Physics(player, enemies, weapon, weapon)
+                        waiting = False
+                    elif check_button_click(pos, screen.window_width // 2 + 60, screen.window_height // 2, 100, 50):
+                        running = False
+                        waiting = False
+
+    pygame.display.flip()

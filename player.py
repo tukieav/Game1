@@ -27,3 +27,6 @@ class Player:
             self.weapon.shoot(self.player_x, self.player_y)
             return current_time  # Zwraca czas ostatniego strzału
         return last_shot_time
+    
+    def get_position(self):
+        return self.player_x, self.player_y
