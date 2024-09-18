@@ -14,11 +14,11 @@ pygame.init()
 
 # Inicjalizacja obiektów
 screen = Screen()
-weapon = Weapons(screen, 'basic')  # Dodaj tę linię
+weapon = Weapons(screen, 'basic')
 player = Player(screen, weapon)
 background = Background()
 enemies = Enemies()
-physics = Physics(player, enemies, weapon, weapon)  # Zaktualizuj tę linię
+physics = Physics(player, enemies, weapon, weapon)
 
 # Główna pętla gry
 running = True
@@ -61,7 +61,7 @@ while running:
     player.move_player(keys)
 
     # Strzelanie
-    current_time = pygame.time.get_ticks() / 1000  # Konwersja do sekund
+    current_time = pygame.time.get_ticks() / 1000
     last_shot_time = player.shoot(keys, current_time, last_shot_time, shoot_interval)
 
     # Aktualizacja i rysowanie pocisków
