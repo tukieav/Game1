@@ -16,6 +16,7 @@ screen = Screen()
 player = Player(screen)
 background = Background()
 enemies = Enemies()
+physics = Physics(player, enemies)  # Dodaj tę linię
 
 # Główna pętla gry
 running = True
@@ -55,10 +56,9 @@ while running:
     player.move_player(keys)
 
     # Sprawdzanie kolizji
-    if Physics.check_collisions(player.player_x, enemies.enemy_list):
+    if physics.check_collisions(player, enemies.enemy_list):
         print("Kolizja! Gra zakończona!")
         running = False
-
 
     # Odświeżanie ekranu
     pygame.display.flip()

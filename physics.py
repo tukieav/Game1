@@ -5,8 +5,11 @@ class Physics:
         self.player = player
         self.enemies = enemies
 
-    def check_collisions (self, player, enemies):
-        for enemies in enemies:
-            if (player.player_x < enemies.enemy[0] < player.player_x + player.player_size or player.player_x < enemies.enemy[0] + enemies.enemy_size < player.player_x + player.player_size):
+    def check_collisions(self, player, enemies):
+        for enemy in enemies:
+            if (player.player_x < enemy[0] + self.enemies.enemy_size and
+                player.player_x + player.size > enemy[0] and
+                player.player_y < enemy[1] + self.enemies.enemy_size and
+                player.player_y + player.size > enemy[1]):
                 return True
         return False

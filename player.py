@@ -12,9 +12,9 @@ class Player:
         self.speed = 0.5
 
     def move_player(self, keys):
-        if keys[pygame.K_LEFT]and self.x > 0:
+        if keys[pygame.K_LEFT] and self.player_x > 0:
             self.player_x -= self.speed
-        if keys[pygame.K_RIGHT]and self.x < self.screen.window_width - self.size:
+        if keys[pygame.K_RIGHT] and self.player_x < self.screen.window_width - self.size:
             self.player_x += self.speed
 
     def draw_player(self, screen):
