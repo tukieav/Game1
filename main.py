@@ -8,20 +8,9 @@ from background import Background
 from enemies import Enemies
 from physics import Physics
 from weapons import Weapons
+from menu import draw_text, draw_button, check_button_click
 
 pygame.init()
-
-def draw_text(screen, text, size, x, y):
-    font = pygame.font.Font(None, size)
-    text_surface = font.render(text, True, (255, 255, 255))
-    screen.display.blit(text_surface, (x, y))
-
-def draw_button(screen, text, x, y, width, height):
-    pygame.draw.rect(screen.display, (0, 0, 0), (x, y, width, height))
-    draw_text(screen, text, 36, x + 10, y + 10)
-
-def check_button_click(pos, x, y, width, height):
-    return x < pos[0] < x + width and y < pos[1] < y + height
 
 screen = Screen()
 weapon = Weapons(screen, 'basic')
@@ -81,12 +70,12 @@ while running:
                     waiting = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
-                    if check_button_click(pos, screen.window_width // 2 - 60, screen.window_height // 2, 100, 50):
+                    if check_button_click(pos, screen.window_width // 2 - 60, screen.window_height // 2 - 50, 100, 50):
                         player = Player(screen, weapon)
                         enemies = Enemies()
                         physics = Physics(player, enemies, weapon, weapon)
                         waiting = False
-                    elif check_button_click(pos, screen.window_width // 2 + 60, screen.window_height // 2, 100, 50):
+                    elif check_button_click(pos, screen.window_width // 2 + 60, screen.window_height // 2 - 50, 100, 50):
                         running = False
                         waiting = False
 
