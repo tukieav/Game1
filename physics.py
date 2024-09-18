@@ -1,9 +1,14 @@
 from player import Player
 from enemies import Enemies
+from weapons import Weapons
+
 class Physics:
-    def __init__(self, player, enemies):
+    def __init__(self, player, enemies, weapon, bullet):
         self.player = player
         self.enemies = enemies
+        self.weapon = weapon
+        self.bullet = bullet
+
 
     def check_collisions(self, player, enemies):
         for enemy in enemies:
@@ -13,3 +18,14 @@ class Physics:
                 player.player_y + player.size > enemy[1]):
                 return True
         return False
+    
+    def hit_by_bullet(self, enemies, weapon):
+        for bullet in weapon.bullets:
+            for enemy in enemies:
+                if (bullet[0] < enemy[0] + self.enemies.enemy_size and
+                    bullet[0] + weapon.size > enemy[0] and
+                    bullet[1] < enemy[1] + self.enemies.enemy_size and
+                    bullet[1] + weapon.size > enemy[1]):
+                    enemies.remove(enemy)
+                    weapon.bullets.remove(bullet)
+                    break

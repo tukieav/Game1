@@ -7,19 +7,24 @@ from screen import Screen
 from background import Background
 from enemies import Enemies
 from physics import Physics
+from weapons import Weapons
 
 # Inicjalizacja Pygame
 pygame.init()
 
 # Inicjalizacja obiektów
 screen = Screen()
-player = Player(screen)
+weapon = Weapons(screen, 'basic')  # Dodaj tę linię
+player = Player(screen, weapon)
 background = Background()
 enemies = Enemies()
-physics = Physics(player, enemies)  # Dodaj tę linię
+physics = Physics(player, enemies, weapon, weapon)  # Zaktualizuj tę linię
 
 # Główna pętla gry
 running = True
+last_shot_time = 0
+shoot_interval = 0.1
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -55,10 +60,21 @@ while running:
     keys = pygame.key.get_pressed()
     player.move_player(keys)
 
+    # Strzelanie
+    current_time = pygame.time.get_ticks() / 1000  # Konwersja do sekund
+    last_shot_time = player.shoot(keys, current_time, last_shot_time, shoot_interval)
+
+    # Aktualizacja i rysowanie pocisków
+    weapon.update_bullets()
+    weapon.draw_bullets(screen)
+
+    # Sprawdzanie trafień pociskami
+    physics.hit_by_bullet(enemies.enemy_list, weapon)
+
     # Sprawdzanie kolizji
     if physics.check_collisions(player, enemies.enemy_list):
         print("Kolizja! Gra zakończona!")
         running = False
 
     # Odświeżanie ekranu
-    pygame.display.flip()
+    pygame.display.flip() 
