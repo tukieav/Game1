@@ -1,5 +1,5 @@
 import pygame
-
+from interface import draw_points, draw_health
 from screen import Screen
 
 
@@ -9,8 +9,9 @@ class Player:
         self.size = 10
         self.player_x = screen.window_width // 2 - self.size // 2
         self.player_y = screen.window_height - self.size - 10
-        self.speed = 0.5
-
+        self.speed = 0.1
+        self.health = 100
+        self.points = 0
         self.weapon = weapon
 
     def move_player(self, keys):
@@ -21,11 +22,13 @@ class Player:
 
     def draw_player(self, screen):
         pygame.draw.rect(screen.display, screen.YELLOW, (self.player_x, self.player_y, self.size, self.size))
+        draw_points(screen, self.points)
+        draw_health(screen, self.health)
 
     def shoot(self, keys, current_time, last_shot_time, shoot_interval):
         if keys[pygame.K_SPACE] and current_time - last_shot_time > shoot_interval:
             self.weapon.shoot(self.player_x, self.player_y)
-            return current_time  # Zwraca czas ostatniego strzału
+            return current_time 
         return last_shot_time
     
     def get_position(self):

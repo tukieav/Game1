@@ -2,8 +2,8 @@ import pygame
 
 class Screen:
     def __init__(self):
-        self.window_width = 768  # szerokosc ekranu
-        self.window_height = 512  # wysokosc ekranu
+        self.window_width = 512  
+        self.window_height = 768 
         self.display = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption('Star Killer')
         self.WHITE = (255, 255, 255)
@@ -14,3 +14,5 @@ class Screen:
 
     def fill_background(self):
         self.display.fill(self.SPACE)
+
+    
