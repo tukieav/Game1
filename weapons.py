@@ -9,6 +9,7 @@ class Weapons:
         self.bullets = []
         self.screen = screen
         self.shoot_interval = 0.1
+        self.fire_power = 1
 
     def shoot(self, player_x, player_y):
         bullet_x = player_x + self.size // 2

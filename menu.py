@@ -19,7 +19,7 @@ def show_game_over_screen(screen, draw_text, draw_button, check_button_click, pl
     draw_text(screen, "You Loose! Restart?", 64, screen.window_width // 4, screen.window_height // 4)
     draw_button(screen, "Yes", screen.window_width // 2 - 60, screen.window_height // 2 - 50, 100, 50)
     draw_button(screen, "No", screen.window_width // 2 + 60, screen.window_height // 2 - 50, 100, 50)
-    draw_text(screen, f"Punkty = {player.points}", 64, screen.window_width // 2, screen.window_height // 2 + 50)
+    draw_text(screen, "Punkty = " + str(player.points), 64, screen.window_width // 2, screen.window_height // 2)
     pygame.display.flip()
 
     waiting = True

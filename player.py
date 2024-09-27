@@ -9,7 +9,7 @@ class Player:
         self.size = 10
         self.player_x = screen.window_width // 2 - self.size // 2
         self.player_y = screen.window_height - self.size - 10
-        self.speed = 0.1
+        self.speed = 1
         self.health = 100
         self.points = 0
         self.weapon = weapon
