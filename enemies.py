@@ -5,7 +5,7 @@ from screen import Screen
 class Enemies:
     def __init__(self):
         self.enemy_size = 20
-        self.enemy_speed = 0.6
+        self.enemy_speed = 2
         self.enemy_health = 1
         self.enemy_list = []
 
@@ -26,7 +26,7 @@ class LargeEnemy(Enemies):
     def __init__(self):
         super().__init__()
         self.enemy_size = 60
-        self.enemy_speed = 0.3
+        self.enemy_speed = 1.3
         self.enemy_health = 20
 
     def create_enemies(self, window_width):

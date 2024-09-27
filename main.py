@@ -22,27 +22,28 @@ background = Background()
 enemies = Enemies()
 physics = Physics(player, enemies, weapon, weapon)
 large_enemies = LargeEnemy()
+clock = pygame.time.Clock()
+
 
 running = True
 last_shot_time = 0
 
 while running:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
     screen.fill_background()
-
     if random.randint(0, 20) < 1:
         background.create_stars(screen.window_width)
-
     background.update_stars(screen.window_height)
     background.draw_stars(screen)
 
-    if random.randint(0, 1000) < 1:
+    if random.randint(0, 45) < 1:
         enemies.create_enemies(screen.window_width)
 
-    if random.randint(0, 2000) < 1:
+    if random.randint(0, 300) < 1:
         large_enemies.create_enemies(screen.window_width)
 
     enemies.update_enemies(screen.window_height)
@@ -77,14 +78,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill_background()
-
-    if random.randint(0, 20) < 1:
-        background.create_stars(screen.window_width)
-
-    background.update_stars(screen.window_height)
-    background.draw_stars(screen)
-
     if random.randint(0, 1000) < 1:
         enemies.create_enemies(screen.window_width)
 
@@ -106,8 +99,6 @@ while running:
     physics.hit_by_bullet(enemies.enemy_list, weapon)
 
     if physics.check_collisions(player, enemies.enemy_list):
-        running, player, enemies, physics = menu.show_game_over_screen(
-    screen, draw_text, draw_button, check_button_click, player, enemies, physics, weapon
-)
+        running, player, enemies, physics = menu.show_game_over_screen(screen, draw_text, draw_button, check_button_click, player, enemies, physics, weapon)
 
     pygame.display.flip()
