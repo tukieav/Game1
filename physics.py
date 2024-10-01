@@ -19,13 +19,8 @@ class Physics:
                     bullet[1] + weapon.size > enemy[1]):
                     enemy[2] -= weapon.fire_power
                     if enemy[2] <= 0:
-                        if enemy[3] == 60:  # Sprawdź, czy to duży wróg
-                            enemies.remove(enemy)
-                            self.player.points += 5
-
-                        else:
-                            enemies.remove(enemy)
-                            self.player.points += 1
+                        self.player.points += enemy[4]
+                        enemies.remove(enemy)
                     weapon.bullets.remove(bullet)
                     break
 
@@ -35,14 +30,9 @@ class Physics:
                 player.player_x + player.size > enemy[0] and
                 player.player_y < enemy[1] + enemy[3] and
                 player.player_y + player.size > enemy[1]):
-                if enemy[3] == 60:
-                    player.health -= 50
-                    enemies.remove(enemy)
-                    self.player.points += 5
-                else:
-                    player.health -= 10
-                    enemies.remove(enemy)
-                    self.player.points += 1
+                player.health -= enemy[4]  
+                self.player.points += enemy[5]  
+                enemies.remove(enemy)
                 if player.health <= 0:
                     return True
         return False

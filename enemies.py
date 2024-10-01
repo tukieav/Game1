@@ -8,10 +8,13 @@ class Enemies:
         self.enemy_speed = 2
         self.enemy_health = 1
         self.enemy_list = []
+        self.points = 1
+        self.damage = 10
 
     def create_enemies(self, window_width):
         x_pos = random.randint(0, window_width - self.enemy_size)
-        self.enemy_list.append([x_pos, 0, self.enemy_health, self.enemy_size])
+        enemy = [x_pos, 0, self.enemy_health, self.enemy_size, self.points, self.damage]
+        self.enemy_list.append(enemy)
 
     def draw_enemies(self, screen):
         for enemy in self.enemy_list:
@@ -28,10 +31,13 @@ class LargeEnemy(Enemies):
         self.enemy_size = 60
         self.enemy_speed = 1.3
         self.enemy_health = 20
+        self.points = 10
+        self.damage = 50
 
     def create_enemies(self, window_width):
         x_pos = random.randint(0, window_width - self.enemy_size)
-        self.enemy_list.append([x_pos, 0, self.enemy_health, self.enemy_size])
+        enemy = [x_pos, 0, self.enemy_health, self.enemy_size, self.points, self.damage]
+        self.enemy_list.append(enemy)
 
     def draw_enemies(self, screen):
         for enemy in self.enemy_list:
@@ -48,11 +54,15 @@ class Boss(Enemies):
         super().__init__()
         self.enemy_size = 250
         self.enemy_speed = 0.1
-        self.enemy_health = 2000
+        self.enemy_health = 150
+        self.points = 100
+        self.damage = 100
 
     def create_enemies(self, window_width):
         x_pos = random.randint(0, window_width - self.enemy_size)
-        self.enemy_list.append([x_pos, 0, self.enemy_health, self.enemy_size])
+        enemy = [x_pos, 0, self.enemy_health, self.enemy_size, self.points, self.damage]
+        self.enemy_list.append(enemy)
+
 
     def draw_enemies(self, screen):
         for enemy in self.enemy_list:
