@@ -20,3 +20,9 @@ class Background:
         self.star_list = [star for star in self.star_list if star[1] < window_height]
         for star in self.star_list:
             star[1] += self.star_speed
+
+    def update_and_draw(self, screen):
+        if random.randint(0, 20) < 1:
+            self.create_stars(screen.window_width)
+        self.update_stars(screen.window_height)
+        self.draw_stars(screen)

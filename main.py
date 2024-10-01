@@ -1,17 +1,12 @@
 import pygame
 import random
-import screen
-import menu
-import time
-import enemies
-
-from player import Player
 from screen import Screen
 from background import Background
+from player import Player
 from enemies import Enemies, LargeEnemy, Boss
 from physics import Physics
 from weapons import Weapons
-from menu import draw_text, draw_button, check_button_click
+from menu import show_game_over_screen
 
 pygame.init()
 
@@ -19,11 +14,13 @@ screen = Screen()
 background = Background()
 weapon = Weapons(screen, 'basic')
 player = Player(screen, weapon)
-physics = Physics(player, enemies, weapon, weapon)
 enemies = Enemies()
 large_enemies = LargeEnemy()
 boss = Boss()
+physics = Physics(player, enemies, large_enemies, boss, weapon)
 boss_created = False
+last_enemy_time = 0
+last_large_enemy_time = 0
 
 clock = pygame.time.Clock()
 
@@ -33,59 +30,45 @@ last_shot_time = 0
 
 while running:
     clock.tick(60)
+    current_time = pygame.time.get_ticks() / 1000
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
     screen.fill_background()
-    if random.randint(0, 20) < 1:
-        background.create_stars(screen.window_width)
-    background.update_stars(screen.window_height)
-    background.draw_stars(screen)
+    background.update_and_draw(screen)
 
-    if random.randint(0, 45) < 1:
+    if current_time - last_enemy_time > random.uniform(0.5, 1.0):
         enemies.create_enemies(screen.window_width)
+        last_enemy_time = current_time
 
-    if random.randint(0, 300) < 1:
+    if current_time - last_large_enemy_time > random.uniform(5.0, 10.0):
         large_enemies.create_enemies(screen.window_width)
+        last_large_enemy_time = current_time
 
-    if player.points % 20 == 0 and player.points != 0 and not boss_created:
+    if player.points % 200 == 0 and player.points != 0 and not boss_created:
         boss.create_enemies(screen.window_width)
-        boss_created = True  
+        boss_created = True
 
-    if player.points % 20 != 0:
-        boss_created = False
 
-    enemies.update_enemies(screen.window_height)
-    enemies.draw_enemies(screen)
+    enemies.update_and_draw(screen)
+    large_enemies.update_and_draw(screen)
+    boss.update_and_draw(screen)
 
-    large_enemies.update_enemies(screen.window_height)
-    large_enemies.draw_enemies(screen)
-
-    boss.update_enemies(screen.window_height)
-    boss.draw_enemies(screen)
-
-    player.draw_player(screen)
+    player.update_and_draw(screen)
 
     keys = pygame.key.get_pressed()
-    player.move_player(keys)
-
-    current_time = pygame.time.get_ticks() / 1000
-    player_x, player_y = player.get_position()
-    last_shot_time = weapon.shoot_with_interval(keys, current_time, last_shot_time, player_x, player_y)
+    shoot_interval = weapon.shoot_interval 
+    last_shot_time = player.shoot(keys, current_time, last_shot_time, shoot_interval)
 
     weapon.update_bullets()
     weapon.draw_bullets(screen)
 
-    physics.hit_by_bullet(enemies.enemy_list, weapon)
-    physics.hit_by_bullet(large_enemies.enemy_list, weapon)
-    physics.hit_by_bullet(boss.enemy_list, weapon)
+    physics.check_collisions_and_hits()
 
-
-
-    if physics.check_collisions(player, enemies.enemy_list) or physics.check_collisions(player, large_enemies.enemy_list) or physics.check_collisions(player, boss.enemy_list):
-        running, player, enemies, physics = menu.show_game_over_screen(
-            screen, draw_text, draw_button, check_button_click, player, enemies, physics, weapon
-        )
+    if physics.check_game_over():
+        running, player, enemies, physics = show_game_over_screen(
+            screen, player, enemies, physics, weapon
+        )   
 
     pygame.display.flip()

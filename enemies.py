@@ -25,6 +25,10 @@ class Enemies:
         for enemy in self.enemy_list:
             enemy[1] += self.enemy_speed
 
+    def update_and_draw(self, screen):
+        self.update_enemies(screen.window_height)
+        self.draw_enemies(screen)
+
 class LargeEnemy(Enemies):
     def __init__(self):
         super().__init__()
@@ -47,6 +51,10 @@ class LargeEnemy(Enemies):
         self.enemy_list = [enemy for enemy in self.enemy_list if enemy[1] < window_height]
         for enemy in self.enemy_list:
             enemy[1] += self.enemy_speed
+
+    def update_and_draw(self, screen):
+        self.update_enemies(screen.window_height)
+        self.draw_enemies(screen)
 
 
 class Boss(Enemies):
@@ -72,3 +80,7 @@ class Boss(Enemies):
         self.enemy_list = [enemy for enemy in self.enemy_list if enemy[1] < window_height]
         for enemy in self.enemy_list:
             enemy[1] += self.enemy_speed
+
+    def update_and_draw(self, screen):
+        self.update_enemies(screen.window_height)
+        self.draw_enemies(screen)

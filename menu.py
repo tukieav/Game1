@@ -15,7 +15,7 @@ def draw_button(screen, text, x, y, width, height):
 def check_button_click(pos, x, y, width, height):
     return x < pos[0] < x + width and y < pos[1] < y + height
 
-def show_game_over_screen(screen, draw_text, draw_button, check_button_click, player, enemies, physics, weapon):
+def show_game_over_screen(screen, player, enemies, physics, weapon):
     draw_text(screen, "You Loose! Restart?", 64, screen.window_width // 4, screen.window_height // 4)
     draw_button(screen, "Yes", screen.window_width // 2 - 60, screen.window_height // 2 - 50, 100, 50)
     draw_button(screen, "No", screen.window_width // 2 + 60, screen.window_height // 2 - 50, 100, 50)
@@ -40,4 +40,3 @@ def show_game_over_screen(screen, draw_text, draw_button, check_button_click, pl
                     running = False
                     waiting = False
     return running, player, enemies, physics
-

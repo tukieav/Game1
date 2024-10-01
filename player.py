@@ -33,3 +33,8 @@ class Player:
     
     def get_position(self):
         return self.player_x, self.player_y
+    
+    def update_and_draw(self, screen):
+        keys = pygame.key.get_pressed()
+        self.move_player(keys)
+        self.draw_player(screen)
